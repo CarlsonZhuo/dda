@@ -175,12 +175,12 @@ c-----MOVE TO THE NEXT POINT.
 
 
  10   FORMAT(I)
- 99   IF (IO_STAT .NE. 0) THEN 
-            WRITE (*, 50) ERR 
-      ENDIF
+ 99   IF (IO_STAT .NE. 0) GOTO 98
+            GOTO 97
+ 98   WRITE (*, 50) ERR 
  30   FORMAT(A2)
  40   FORMAT(A2, A3)
  50   FORMAT(A)
       
-      STOP
+ 97   STOP
       END
