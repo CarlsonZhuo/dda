@@ -74,23 +74,34 @@ c ===========================================================
       CUR_Y = AY
       CNT = 1
 
+c-----FOR AN INFINITE LARGE SLOPE, GO TO CASE 2
+      IF (BX .EQ. AX) GOTO 105
+
+c-----CASE 1 - FINITE SLOPE
       M = REAL(BY - AY) / (BX - AX)
 
  104  IF (CUR_X .EQ. BX .AND. CUR_Y .EQ. BY) GOTO 101
             RESULT(CUR_Y + 1, CUR_X + 1) = '*'
             IF (ABS(M) .GT. 1) GOTO 102
+c-----------------CASE 1.1 - ABS(SLOPE) <= 1            
                   CUR_X = AX + SIGN(CNT, (BX - AX))
                   CUR_Y = NINT(AY + SIGN((CNT * M), (BY - AY)))
                   GOTO 103
+c-----------------CASE 1.2 - ABS(SLOPE) > 1
  102              CUR_X = NINT(AX + SIGN((CNT / M), (BX - AX)))
                   CUR_Y = AY + SIGN(CNT, (BY - AY))
                   GOTO 103
  103              CNT = CNT + 1
                   GOTO 104
+
+c-----CASE 2 - INFINITE SLOPE
+ 105  IF (CUR_Y .EQ. BY) GOTO 101
+            RESULT(CUR_Y + 1, CUR_X + 1) = '*'
+            CUR_Y = CUR_Y + SIGN(1, (BY - AY))
+            GOTO 105
+
  101  RESULT(BY + 1,BX + 1) = '*'
 
- 10   FORMAT(F)
- 20   FORMAT(I, I)
       RETURN
       END     
 c ===========================================================
